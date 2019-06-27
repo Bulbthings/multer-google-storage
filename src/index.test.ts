@@ -1,11 +1,11 @@
 import { expect } from 'chai';
-import * as mockery from  'mockery';
+import * as mockery from 'mockery';
 
 
 describe('multer-google-storage', () => {
     before(() => {
         mockery.enable();
-        const storageMock = () => { return {bucket: () => {}}};
+        const storageMock = () => { return { bucket: () => { } } };
         mockery.registerMock('@google-cloud/storage', storageMock);
 
         process.env.GCS_BUCKET = 'test';
@@ -13,14 +13,17 @@ describe('multer-google-storage', () => {
         process.env.GCS_KEYFILE = './test';
     });
 
-    it('should define multer storage engine interface',() => {
+    it('should define multer storage engine interface', () => {
+        try {
+            const MulterGoogleCloudStorage = require('./index').default;
+            const cloudStorage = new MulterGoogleCloudStorage();
 
-        const MulterGoogleCloudStorage = require('./index').default;
-        const cloudStorage = new MulterGoogleCloudStorage();
-
-        expect(cloudStorage._handleFile).to.be.a('function');
-        expect(cloudStorage._removeFile).to.be.a('function');
-        expect(cloudStorage.getDestination).to.be.a('function');
+            expect(cloudStorage._handleFile).to.be.a('function');
+            expect(cloudStorage._removeFile).to.be.a('function');
+            expect(cloudStorage.getDestination).to.be.a('function');
+        } catch (err) {
+            console.error(err);
+        }
     });
 
     after(() => mockery.disable());
