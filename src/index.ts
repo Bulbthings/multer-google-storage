@@ -1,12 +1,11 @@
 import * as  multer from 'multer';
-import { Storage as StorageType, Bucket, CreateWriteStreamOptions, StorageOptions, PredefinedAcl } from '@google-cloud/storage';
+import { Storage, Bucket, CreateWriteStreamOptions, StorageOptions, PredefinedAcl } from '@google-cloud/storage';
 import * as uuid from 'uuid/v1';
 import { Request } from 'express';
 import { Metadata } from '@google-cloud/common';
-const Storage = require('@google-cloud/storage');
 
 export default class MulterGoogleCloudStorage implements multer.StorageEngine {
-    private gcobj: StorageType;
+    private gcobj: Storage;
     private gcsBucket: Bucket;
     private options: StorageOptions & { acl?: PredefinedAcl, bucket?: string, contentType?: ContentTypeFunction, metadata?: Metadata };
 
